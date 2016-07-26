@@ -1,0 +1,66 @@
+program funjuego
+
+|[
+fun funjuego :(mensajeA:String, opcion:int) -> boolean
+
+{pre 0<=length(mensajeA)<=80 /\ 0<=opcion<=2}
+
+{post funjuego==((%forall i: 0<=i<80 : (mensajeA)=!"&") /\ (opcion=2))}
+
+  |[ var juego:=true: boolean;
+     var k:=0 : int;
+     var b:=true :int;
+
+     {inv juego==(%forall i: 0<=i<k : mensajeA!="&") /\ 0<=k<=length(mensajeA)} 
+     {bound (length(mensajeA)-k)} 
+     do k!=length(mensajeA) -> if substring(mensajeA,k)!="&" -> skip
+                               |  substring(mensajeA,k)="&" -> b:=false 
+                               fi;
+                               k:=k+1
+     od;
+     if opcion=0 -> juego:=false
+     |  opcion=1 -> juego:=juego/\b
+     |  opcion=3 -> skip
+     fi
+
+>> juego
+
+  ]|
+
+const mensajeA= readString("Introducir mensajea adivinado") :String;
+
+{0<=length(mensajeA)<=80 /\ 0<=opcion<=2}
+
+write(+funjuego)
+
+]|
+
+
+
+
+
+
+program juegoterminado |[
+const N = readInt("Introducir el tamano del arreglo"): int;
+const mensajeA = %[i:N: readString("Introducir letras del arreglo A")]% : array[] of String;
+var evaluar:= true: boolean;
+const opcion= readInt("Introducir opcion: Opcion 0 :Jugar Letra Opcion 1 :Adivinar Opcion 2 :Rendirse"): int;
+var b:=true: boolean;
+var k:=0 :int;
+{0<=opcion<=2 /\ evaluar==true /\ 0<N<=80}   
+{inv evaluar==(%forall i: 0<=i<k : mensajeA[i]!="&") /\ 0<=k<=N} 
+{bound (N-k)}  
+do k!=N /\ (b==true) ->  if mensajeA[k]!="&"-> skip
+                         |  mensajeA[k]="&" -> b:=false
+                         fi;
+                         k:=k+1
+od;
+if opcion=0 -> evaluar:=false
+|  opcion=1 -> evaluar:=evaluar/\b
+|  opcion=2 -> skip
+fi;
+if evaluar==true -> write("EL JUEGO HA TERMINADO")
+|  evaluar==false -> write("EL JUEGO NO HA TERMINADO")
+fi
+{(evaluar==(%forall i: 0<=i<N : mensajeA[i]!="&")) \/ (evaluar==!(%forall i: 0<=i<N : mensajeA[i]!="&"))}
+]|

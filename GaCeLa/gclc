@@ -1,0 +1,48 @@
+#!/bin/bash
+
+EXEC=gcl.jar
+
+usage() {
+    echo "uso: gclc [-opciones] <archivo> "
+    echo ""
+    echo "El argumento <archivo> es el nombre de un archivo con un"
+    echo "programa en GaCeLa, por ejemplo si quiero compilar el archivo"
+    echo "miPrograma.gcl uso el siguiente comando:"
+    echo -e "   gclc miPrograma.gcl"
+    echo ""
+    echo "Las posibles opciones son: " 
+    echo -e "   -NO\tno generar el archivo de obligaciones"
+    echo -e "   -O\tgenerar el archivo de obligaciones (por defecto)"
+    echo -e "   -NA\tno generar el archivo de obligaciones para ACL2 (por defecto)"
+    echo -e "   -A\tgenerar el archivo de obligaciones para ACL2"
+    echo -e "   -NV\tno verificar la correctitud del programa (por defecto)"
+    echo -e "   -V\tverificar la correctitud del programa"
+    echo -e "   -h\tdespliega esta informaci�n y termina"
+    echo ""
+    echo "Note que es posible usar varias opciones al mismo tiempo, por ejemplo"
+    echo "si se quiere compilar el programa miPrograma.gcl y generar las"
+    echo "obligaciones de prueba para ACL2, pero no verificarlas se puede usar el"
+    echo "siguiente comando:"
+    echo -e "    gclc -A -NV miPrograma.gcl"
+    echo ""
+    echo "Para poder verificar la correctitud del programa es necesario" 
+    echo "tener instalado ACL2 en el sistema.  Para mayor informaci�n " 
+    echo "consulte: http://gacela.labf.usb.ve/GCLWiki" 
+    exit 1
+}
+
+
+if [ -z ${GACELA_PATH} ]; then
+    echo "No ha sido especificada la variable del sistema GACELA_PATH"
+    echo "por favor definala indicando donde se encuentra el archivo"
+    echo -e "${EXEC}"
+fi
+
+for i in ${@}; do
+    if [ -z $i ] || [ $i == "-h" ] || [ $i == "--help" ]; then
+	usage
+    fi
+done
+
+java -cp ${CLASSPATH} -jar ${GACELA_PATH}/${EXEC} ${@}
+

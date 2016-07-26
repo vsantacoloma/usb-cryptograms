@@ -1,0 +1,127 @@
+program letra |[
+
+/*Funcion Convertir letra en numero. Esta funcion sera llamada dentro de la funcion obtenerJugada*/
+
+  fun convertirletranum: (letra: String) -> int
+
+  {pre letra="A" \/ letra="B" \/ letra="C" \/ letra="D" \/ letra="E" \/ letra="F" \/ letra="G" \/ letra="H" \/ letra="I" \/ letra="J" \/ letra="K" \/ letra="L" \/ letra="M" \/ letra="N" \/ letra="O" \/ letra="P" \/ letra="Q" \/ letra="R" \/ letra="S" \/ letra="T" \/ letra="U" \/ letra="V" \/ letra="W" \/ letra="X" \/ letra="Y" \/ letra="Z"}
+  {post true \/ false}
+
+  |[  var num:=0: int;
+
+     if letra="A" -> num:=0           
+     |  letra="B" -> num:=1
+     |  letra="C" -> num:=2
+     |  letra="D" -> num:=3
+     |  letra="E" -> num:=4
+     |  letra="F" -> num:=5
+     |  letra="G" -> num:=6
+     |  letra="H" -> num:=7
+     |  letra="I" -> num:=8
+     |  letra="J" -> num:=9
+     |  letra="K" -> num:=10
+     |  letra="L" -> num:=11
+     |  letra="M" -> num:=12
+     |  letra="N" -> num:=13
+     |  letra="O" -> num:=14
+     |  letra="P" -> num:=15
+     |  letra="Q" -> num:=16
+     |  letra="R" -> num:=17
+     |  letra="S" -> num:=18
+     |  letra="T" -> num:=19
+     |  letra="U" -> num:=20
+     |  letra="V" -> num:=21
+     |  letra="W" -> num:=22
+     |  letra="X" -> num:=23
+     |  letra="Y" -> num:=24
+     |  letra="Z" -> num:=25
+     fi
+
+  >> num
+  
+  ]|
+
+  /*Funcion convertir numero en letra. Esta funcion sera utilizada para transcribir el mensaje descifrado de enteros a uno de string*/
+
+  fun convertirnumletra: (num: int) -> String
+
+  {pre 0<=num<=25}
+  {post true \/ false}
+
+  |[  var letra:="": String;
+
+     if num=0  -> letra:="A"
+     |  num=1  -> letra:="B"
+     |  num=2  -> letra:="C"
+     |  num=3  -> letra:="D"
+     |  num=4  -> letra:="E"
+     |  num=5  -> letra:="F"
+     |  num=6  -> letra:="G"
+     |  num=7  -> letra:="H"
+     |  num=8  -> letra:="I"
+     |  num=9  -> letra:="J"
+     |  num=10 -> letra:="K"
+     |  num=11 -> letra:="L"
+     |  num=12 -> letra:="M"
+     |  num=13 -> letra:="N"
+     |  num=14 -> letra:="O"
+     |  num=15 -> letra:="P" 
+     |  num=16 -> letra:="Q"
+     |  num=17 -> letra:="R"
+     |  num=18 -> letra:="S"
+     |  num=19 -> letra:="T"
+     |  num=20 -> letra:="U"
+     |  num=21 -> letra:="V"
+     |  num=22 -> letra:="W"
+     |  num=23 -> letra:="X"
+     |  num=24 -> letra:="Y"
+     |  num=25 -> letra:="Z"
+     fi
+
+   >> letra
+
+   ]|
+ 
+/*Funcion obtenerJugada*/
+
+  fun obtenerJugada:(n:int ,alf: array[] of String) -> array[] of int
+  {pre 0<n<=80}
+  {post true \/ false}
+
+  |[  var num:= %[i:n: convertirletranum(alf[i])]% : array[] of int;
+      var k:=0:int;
+ 
+  {inv (%forall i: 0<=i<k : num[i]= convertirletranum(alf[i]))}
+  {bound n-k}
+  do k!=n -> num[k]:= convertirletranum(alf[k]);
+             k:=k+1
+  od 
+  
+  >>
+     num
+]|
+
+/*Funcion Jugada Valida*/
+
+  proc reflejarMensaje:(in n:int, in out A: array[] of String, in alf: array[] of String, in jugada: array[] of int)
+  {pre 0<n<=80}
+  {post true \/ false}
+
+  |[  var k:=0 : int;  
+      {inv (%forall i: 0<=i<=k :A[k]=alf[k]) /\ 0<=k<n}
+      {bound n-k}
+       do k!=n ->  A[k]:=alf[k];
+                   k:=k+1
+       od
+  
+  ]|
+    /*Las variables p y q son para llamar a las funciones obtener jugada y reflejarMensaje respectivamente*/
+
+    const N= readInt("Tamano del arreglo") : int;
+    const alfabeto= %[i:N: readString("Introduzca letra del mensaje")]% : array[] of String;
+    var p:= %[i:n: obtenerJugada(N, alfabeto)]% : array[] of int;
+    {0<N<=80}
+
+    p:= (obtenerJugada(N,alfabeto));
+    write(" " +p)
+]|

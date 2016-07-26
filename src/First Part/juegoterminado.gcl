@@ -1,0 +1,36 @@
+/*const N = readInt("Introducir el tamano del arreglo"): int;
+const mensajeA = %[i:N: readString("Introducir letras del arreglo A")]% : array[] of String;
+var evaluar:= true: boolean;
+const opcion= readInt("Introducir opcion: Opcion 0 :Jugar Letra Opcion 1 :Adivinar Opcion 2 :Rendirse"): int;
+var b:=true: boolean;
+var k:=0 :int;
+{0<=opcion<=2 /\ evaluar==true /\ 0<N<=80}
+program juego terminado
+{(evaluar==(%forall i: 0<=i<N : mensajeA[i]!="&")) \/ (evaluar==!(%forall i: 0<=i<N : mensajeA[i]!="&"))}
+
+NB: El programa fue disenado para que cuando el jugador haya  rellenado todas las casillas "EL JUEGO NO TERMINE", permitiendole hacer modicaciones al texto escrito. La variable b se definio con el objetivo de que el programa le evalue como "NO TERMINADO" al elegir la opcion Adivinar sin haber rellenado todos los espacios; por el caso contrarios se  evaluara como "TERMINADO" si ademas de seleccionar la opcion Adivinar, se rellenaron todos los espacios del arreglo. Ademas cabe anadir que por el momento la segunda guarda del condicional que se encuentra dentro de la iteracion no podra evaluar; ya que "&" no esta definida hasta ahora pues su definicion correspondera a la parte inicial del proyecto.*/
+
+program juegoterminado |[
+const N = readInt("Introducir el tamano del arreglo"): int;
+const mensajeA = %[i:N: readString("Introducir letras del arreglo A")]% : array[] of String;
+var evaluar:= true: boolean;
+const opcion= readInt("Introducir opcion: Opcion 0 :Jugar Letra Opcion 1 :Adivinar Opcion 2 :Rendirse"): int;
+var b:=true: boolean;
+var k:=0 :int;
+{0<=opcion<=2 /\ evaluar==true /\ 0<N<=80}   
+{inv evaluar==(%forall i: 0<=i<k : mensajeA[i]!="&") /\ 0<=k<=N} 
+{bound (N-k)}  
+do k!=N /\ (b==true) ->  if mensajeA[k]!="&"-> skip
+                         |  mensajeA[k]="&" -> b:=false
+                         fi;
+                         k:=k+1
+od;
+if opcion=0 -> evaluar:=false
+|  opcion=1 -> evaluar:=evaluar/\b
+|  opcion=2 -> skip
+fi;
+if evaluar==true -> write("EL JUEGO HA TERMINADO")
+|  evaluar==false -> write("EL JUEGO NO HA TERMINADO")
+fi
+{(evaluar==(%forall i: 0<=i<N : mensajeA[i]!="&")) \/ (evaluar==!(%forall i: 0<=i<N : mensajeA[i]!="&"))}
+]|

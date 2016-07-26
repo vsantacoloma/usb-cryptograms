@@ -1,0 +1,43 @@
+#!/bin/bash
+
+EXEC=gcl.jar
+
+usage() {
+    echo "uso: gcl [-opci�n] <archivo>"
+    echo ""
+    echo "El argumento <archivo> es el nombre de un archivo ejecutable"
+    echo "de GaCeLa, por ejemplo si quiero ejecutar el archivo miPrograma"
+    echo "uso el siguiente comando:"
+    echo -e "   gcl miPrograma"
+    echo ""
+    echo "Las posibles opciones son: " 
+    echo -e "   -noassert\tdeshabilita la verificaci�n de las condiciones"
+    echo -e "   -h\t\tdespliega esta informaci�n y termina"
+    echo ""
+    echo "Note que s�lo es posible utilizar una de las dos opciones a la"
+    echo "vez."
+    echo ""
+    echo "Para mayor informaci�n consulte:" 
+    echo "http://gacela.labf.usb.ve/GCLWiki" 
+    exit 1
+}
+
+if [ -z ${GACELA_PATH} ]; then
+    echo "No ha sido especificada la variable del sistema GACELA_PATH"
+    echo "por favor definala indicando donde se encuentra el archivo"
+    echo -e "${EXEC}"
+fi
+
+if [ -z $1 ] || [ $1 == "-h" ] || [ $1 == "--help" ]; then
+    usage
+fi
+
+if [ -z $2 ] && [ -f ${1}.class ]; then
+    java -ea -cp .:${GACELA_PATH}/${EXEC} ${1}
+elif [ $1 == "-noassert" ] && [ -f ${2}.class ]; then
+    java -cp .:${GACELA_PATH}/${EXEC} ${2}
+else
+    echo -e "opci�n no v�lida: ${@}"
+fi
+
+

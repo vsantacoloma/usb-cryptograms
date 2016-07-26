@@ -1,0 +1,22 @@
+program Descifrar
+|[
+
+   fun descrifrar:(n:int) -> boolean
+   {pre 0<=n<2}
+   {post descrifrar==((n=0 ==> d==true) \/ (n=1 ==> d==false))}
+
+   |[
+     var d:=true :boolean;
+     if n=0 -> skip
+     |  n=1 -> d:=false
+     fi
+
+   >>
+     d
+
+   ]|
+   const a= readInt("Introducir una opcion: Opcion 0: Descifrar otro mensaje; Opcion 1: Terminar"): int;
+   {0<=a<2}
+   write(" "+descifrar(a))
+
+]|  

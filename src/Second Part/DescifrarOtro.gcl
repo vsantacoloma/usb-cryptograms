@@ -1,0 +1,17 @@
+program DescifrarOtro
+ |[
+   proc Dso: (in n:int, out d:=true: boolean) 
+   {pre 2>n>=0}
+   {post n=0 ==> d==true /\ n=1 ==> d==false}
+  
+    |[ var k:=n: int;
+       if k=0 -> skip
+       |  k=1 -> d:=false 
+       fi
+    ]| 
+   const a= readInt("Introducir una opción: Opción 0: Descifrar otro mensaje, Opcion 1: Terminar"): int;
+   var b:= true: boolean;
+   {0<=a<2}
+    Dso(a)
+   {a=0 ==> b==true /\ a=1 ==> b==false}
+]|

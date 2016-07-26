@@ -1,0 +1,16 @@
+program DescifrarOtro
+ |[
+  proc Dso:(in n :int, out d:=true : boolean)
+
+    {pre 2>n>=0}
+    {post n=0 => d /\ n=1 => !d }
+
+     |[ if n=0 -> skip
+	 | n=1 -> d:=false 
+        fi
+     ]|
+   const a: readI("Introducir una opción: Opción 0: Descifrar otro mensaje, Opcion 1: Terminar"): int;
+   {0<=a<2}
+    Dso(a)
+    ;write(""+Dso(a))
+]|

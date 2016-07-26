@@ -1,0 +1,38 @@
+program fungano
+
+|[      
+   
+ fun fungano :(mensajeD:String,mensajeA:String) -> boolean
+    
+ {pre 0<=length(mensajeD)<=80 /\ 0<=length(mensajeA)<=80}
+    
+ {post fungano== (mensajeD=mensajeA)}
+   
+  |[ var gano:=true: boolean;
+      
+     if mensajeD= mensajeA then skip
+      
+     else gano:= false
+      
+     fi  
+    
+  >>
+    
+     gano
+   
+  ]|
+   
+ const mD= readString("Introducir mensaje descifrado"): String;  
+   
+ const mA= readString("Introducir mensaje adivinado") : String;
+ var jg := o: int;     
+ {0<=length(mD)<=80 /\ 0<=length(mA)<=80}
+
+   
+ write("Gano "+fungano(mD,mA));
+ if fungano then jg:= jg + 1
+ else skip
+ fi      
+
+
+]|

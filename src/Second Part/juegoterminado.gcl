@@ -1,0 +1,52 @@
+/* Programa juegoterminado contiene la dos funcion: terminado y opcion, que son las que evaluaran si el juego se da o no por terminado.*/
+
+program juegoterminado 
+
+|[
+   /*La funcion terminado evaluara si en el arreglo existen caracter por rellenar.*/
+   fun terminado:(n:int, A: array[] of String) -> boolean
+   {pre 0<n<=80} 
+   {post true \/ false}
+   |[ var k:=0: int;
+      var b:=true: boolean;
+      
+      {inv b==(%forall i: 0<=i<k : A[i]!="&") /\ 0<=k<=n}
+      {bound n-k}
+      do k!=n /\ b==true -> if A[k]!="&" -> skip
+                            |  A[k] ="&" -> b:=false
+                            fi;
+                            k:=k+1
+      od
+
+    >> b
+
+   ]|
+   /*La funcion opcion permitira al usuario elegir una de tres opciones referents a las acciones: Jugar Letra, Adivinar o Rendirse*/
+   fun opcion:(op: int) -> boolean
+   {pre  0<=op<=2}
+   {post true \/ false}
+   |[ var evaluar:=true: boolean;
+
+      if op=0 -> evaluar:=false
+      |  op=1 -> skip
+      |  op=2 -> skip 
+      fi
+
+      >> evaluar
+
+   ]|
+
+const N = readInt("Introducir el tamano del arreglo"): int;
+const mensajeA = %[i:N: readString("Introducir letras del arreglo A")]% : array[] of String;
+var p:=true : boolean; 
+var q:=true : boolean;
+{0<N<=80}
+
+/* Las variables p y q se utilizan para asignar el valor resultante de la funcion llamada (terminado y opcion) */
+p:=terminado(N,mensajeA);
+q:=opcion(readInt("Introducir opcion: Opcion 0 :Jugar Letra Opcion 1 :Adivinar Opcion 2 :Rendirse") );
+if (p /\ q)==true  -> write("EL JUEGO HA TERMINADO")
+|  (p /\ q)==false -> write("EL JUEGO NO HA TERMINADO")
+fi
+   
+]|

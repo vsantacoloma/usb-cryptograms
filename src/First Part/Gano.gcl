@@ -1,0 +1,114 @@
+/*    [ const N : int;
+	const mensajeD: array[] of String;
+	const mensajeA: array[] of String;
+	gano: boolean;
+	{0<=N<=80 /\ length (mensajeD[i]=1) /\ length (mensajeD[i]=1)}
+                if mensajeD= mensajeA then skip
+		else gano:= false
+		fi
+	  {gano == (mensajeD= mensajeA)}
+      ]
+
+*/
+
+     program Gano |[ 
+        const N = readInt("Introduzca el numero de caracteres que tiene el mensaje"): int;
+	const mensajeD= %[i:N: readString("Introducir mensaje descifrado")]% : array[] of String;
+	const mensajeA= %[i:N: readString("Introducir mensaje adivinado")]% : array[] of String;
+	var gano:= true : boolean;
+	{0<=N<=80 /\ (%forall i: 0<=i<=N-1: length (mensajeD[i])=1 /\ length (mensajeD[i])=1)}
+                if mensajeD= mensajeA then skip
+		else gano:= false
+		fi;
+	  {gano ==  (mensajeD= mensajeA)}
+	if gano == true then write("Enhorabuena! Has ganado!")
+         else write ("Lo siento! Has perdido!")
+	fi
+      ]|
+
+/*
+Demostramos la correctitud del programa:
+P:  {0<=N<=80 /\ (%forall i: 0<=i<=N-1: length (mensajeD[i])=1 /\ length (mensajeD[i])=1)}
+B0: mensajeD=mensajeA
+B1: mensajeD!=mensajeA
+S0: skip
+S1: gano:= falso
+Q: {gano == (mensajeD = mensajeA)}
+
+Para que el programa sea valido se debe cumplir que:
+i)   P => def. B0 /\ def. B1
+ii)  P => (B0 \/ B1)
+iii) {P /\ B0}
+	SO
+     {Q}
+iv)  {P /\ B1}
+	S1
+     {Q}
+
+Demostramos:
+  i) {0<=N<=80 ^ (  i: 0<=i<=N-1: length (mensajeD[i])=1 ^ length (mensajeD[i])=1)} => def. (mensajeD=mensajeA) ^  def. (mensajeD!=mensajeA)
+    =	< definicion de = , = >
+     {0<=N<=80 ^ (  i: 0<=i<=N-1: length (mensajeD[i])=1 ^ length (mensajeD[i])=1)} => Verdadero ^ Verdadero
+    =	< p ^ p = p >
+     {0<=N<=80 ^ (  i: 0<=i<=N-1: length (mensajeD[i])=1 ^ length (mensajeD[i])=1)} => Verdadero
+    =	< 
+
+ ii) {0<=N<=80 ^ (  i: 0<=i<=N-1: length (mensajeD[i])=1 ^ length (mensajeD[i])=1)} => (mensajeD=mensajeA) v (mensajeD!=mensajeA)
+    =	< p = q =  -(p = q)
+     {0<=N<=80 ^ (  i: 0<=i<=N-1: length (mensajeD[i])=1 ^ length (mensajeD[i])=1)} => (mensajeD=mensajeA) v -(mensajeD=mensajeA
+    =	< p v -p = verdadero >
+     {0<=N<=80 ^ (  i: 0<=i<=N-1: length (mensajeD[i])=1 ^ length (mensajeD[i])=1)} => verdadero
+
+iii) {0<=N<=80 ^ (  i: 0<=i<=N-1: length (mensajeD[i])=1 ^ length (mensajeD[i])=1) ^ (mensajeD=mensajeA)}
+	skip
+     {gano = (mensajeD= mensajeA)}
+ Por definicion de Tripletas de Hoare se puede decir que:
+	{0<=N<=80 ^ (  i: 0<=i<=N-1: length (mensajeD[i])=1 ^ length (mensajeD[i])=1) ^ (mensajeD=mensajeA)} => wp({gano = (mensajeD= mensajeA)}.skip)
+
+ Luego, se tiene que
+   wp({gano = (mensajeD= mensajeA)}.skip)
+  =	<definicion de skip>
+   {gano = (mensajeD= mensajeA)}
+ 
+ Trabajamos el antecedente:
+     {0<=N<=80 ^ (  i: 0<=i<=N-1: length (mensajeD[i])=1 ^ length (mensajeD[i])=1) ^ (mensajeD=mensajeA)}
+    =	< p ^ q => p , con simetria de ^ >
+     {0<=N<=80 ^ (mensajeD=mensajeA)}
+    =	< p ^ q => p , con simetria de ^ >
+     {(mensajeD=mensajeA)}
+
+ Entonces se tiene que:
+     {(mensajeD=mensajeA)} => {gano = (mensajeD= mensajeA)}
+    =	<tomando el valor booleano inicial de gano = verdadero>
+     {(mensajeD=mensajeA)} => {verdadero = (mensajeD= mensajeA)}
+    =	< q = q = true , con simetria de = >
+     {(mensajeD=mensajeA)} => {(mensajeD= mensajeA)}
+    =	< p => p = verdadero >
+     {verdadero}
+
+ iv) {0<=N<=80 ^ (  i: 0<=i<=N-1: length (mensajeD[i])=1 ^ length (mensajeD[i])=1) ^ (mensajeD=mensajeA)}
+	gano:= falso
+     {gano = (mensajeD= mensajeA)}
+ Por definicion de Tripletas de Hoare se puede decir que:
+     {0<=N<=80 ^ (  i: 0<=i<=N-1: length (mensajeD[i])=1 ^ length (mensajeD[i])=1) ^ (mensajeD=mensajeA)} => wp({gano = (mensajeD= mensajeA)}[gano:=falso])
+
+ Luego, se tiene que
+      wp({gano = (mensajeD= mensajeA)}[gano:=falso])
+     =	< sustitucion textual >
+      {falso = (mensajeD= mensajeA)}
+     =  < definicion de inequivalencia >
+      {(mensajeD=mensajeA)}
+     
+ Trabajamos el antecedente:
+      {0<=N<=80 ^ (  i: 0<=i<=N-1: length (mensajeD[i])=1 ^ length (mensajeD[i])=1) ^ (mensajeD=mensajeA)}
+     =	< p ^ q => p , con simetria de ^ >
+      {0<=N<=80 ^ (mensajeD=mensajeA)}
+     =	< p ^ q => p , con simetria de ^ >
+      {(mensajeD=mensajeA)}
+ Entonces se tiene que:
+     {(mensajeD=mensajeA)} => {(mensajeD= mensajeA)}
+    =	< p => p = verdadero >
+     {verdadero}
+
+*/
+
